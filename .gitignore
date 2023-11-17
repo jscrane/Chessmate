@@ -1,0 +1,11 @@
+*.o
+.lib
+libcore.a
+*.elf
+*.bin
+*.d
+*.img
+.*.swp
+.build
+*.txt.mk
+serialout.txt
