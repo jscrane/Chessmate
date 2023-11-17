@@ -19,10 +19,12 @@ public:
 	void black(bool);
 
 private:
+	void initLeds();
 	void drawLed(uint8_t, bool);
 
 	uint8_t selected;
-	uint8_t state[4];
+	uint8_t seg_state[4];
+	bool led_state[4];
 };
 
 #endif

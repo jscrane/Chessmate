@@ -7,7 +7,7 @@
 void disp::begin() {
 	Display::begin(BG_COLOUR, FG_COLOUR, ORIENT);
 	clear();
-	chessmate_loses(false);
+	initLeds();
 }
 
 static const uint16_t digx[] = { 25, 75, 125, 175 };
@@ -33,7 +33,7 @@ static struct rect segs[] = {
 // segments: a-g == 0-6
 void disp::segments(uint8_t s) {
 
-	uint8_t st = state[selected];
+	uint8_t st = seg_state[selected];
 	if (s == 0 || s == st)
 		return;
 
@@ -46,30 +46,42 @@ void disp::segments(uint8_t s) {
 		}
 
 	}
-	state[selected] = s;
+	seg_state[selected] = s;
 }
 
 static const uint8_t ledx[] = { 40, 90, 140, 190 };
 const uint8_t ledy = 100, ledr = 10;
 
-void disp::drawLed(uint8_t x, bool on) {
-	if (on)
-		fillCircle(x, ledy, ledr);
-	else {
-		drawCircle(x, ledy, ledr, FG_COLOUR);
-		fillCircle(x, ledy, ledr-1, BG_COLOUR);
+void disp::initLeds() {
+	for (int i = 0; i < 4; i++) {
+		drawCircle(ledx[i], ledy, ledr, FG_COLOUR);
+		led_state[i] = false;
 	}
 }
 
+void disp::drawLed(uint8_t i, bool on) {
+
+	if (led_state[i] == on)
+		return;
+
+	uint8_t x = ledx[i];
+	if (on)
+		fillCircle(x, ledy, ledr);
+	else
+		fillCircle(x, ledy, ledr-1, BG_COLOUR);
+
+	led_state[i] = on;
+}
+
 void disp::chessmate_loses(bool on) {
-	drawLed(ledx[0], on);
+	drawLed(0, on);
 }
 
 void disp::check(bool on) {
-	drawLed(ledx[1], on);
+	drawLed(1, on);
 }
 
 void disp::white(bool on) {
-	drawLed(ledx[2], on);
-	drawLed(ledx[3], !on);
+	drawLed(2, on);
+	drawLed(3, !on);
 }
