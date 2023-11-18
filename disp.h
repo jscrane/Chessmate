@@ -9,17 +9,15 @@ public:
 	// 7-segment display 
 	// digits: l-r == 0-3
 	// segments: a-g == 0-6
-	void digit(uint8_t);
+	void digit(uint8_t d) { selected = d; }
 	void segments(uint8_t);
 
 	// leds
-	void chessmate_loses(bool);
-	void check(bool);
-	void white(bool);
-	void black(bool);
+	void chessmate_loses(bool on) { drawLed(0, on); }
+	void check(bool on) { drawLed(1, on); }
+	void white(bool on) { drawLed(2, on); drawLed(3, !on); }
 
 private:
-	void initLeds();
 	void drawLed(uint8_t, bool);
 
 	uint8_t selected;
