@@ -30,6 +30,7 @@ void disp::begin() {
 		drawCircle(ledx[i], ledy, ledr, FG_COLOUR);
 		led_state[i] = false;
 	}
+	drawString("Commodore CHESSmate", 25, 0);
 }
 
 // segments: a-g == 0-6
