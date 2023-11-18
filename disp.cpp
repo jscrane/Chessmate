@@ -26,6 +26,8 @@ void disp::begin() {
 	Display::begin(BG_COLOUR, FG_COLOUR, ORIENT, DISPLAY_X, DISPLAY_Y);
 	clear();
 
+	selected = 0;
+
 	for (int i = 0; i < 4; i++)
 		seg_state[i] = 0;
 
@@ -49,7 +51,6 @@ void disp::segments(uint8_t s) {
 			rect &seg = segs[i];
 			fillRectangle(dx+seg.x, seg.y, seg.w, seg.h, (s & b)? FG_COLOUR: BG_COLOUR);
 		}
-
 	}
 	seg_state[selected] = s;
 }

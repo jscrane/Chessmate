@@ -37,7 +37,7 @@ void RIOT::write_edge(uint8_t off, uint8_t data) {
 void RIOT::write(Memory::address a, uint8_t b) {
 
 	if (a >= rsram) {
-		ram[a - 0x80] = b;
+		ram[a - rsram] = b;
 		return;
 	}
 
@@ -136,7 +136,7 @@ void RIOT::update_irq() {
 uint8_t RIOT::read(Memory::address a) {
 
 	if (a >= rsram)
-		return ram[a - 0x80];
+		return ram[a - rsram];
 
 	switch (a) {
 	case sad:
@@ -154,8 +154,6 @@ uint8_t RIOT::read(Memory::address a) {
 	default:
 		return (a & 1)? read_irq(): read_timer();
 	}
-
-	return 0x00;
 }
 
 uint8_t RIOT::read_irq() {

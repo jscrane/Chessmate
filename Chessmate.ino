@@ -1,5 +1,3 @@
-#include <SPI.h>
-
 #include <r65emu.h>
 #include <r6502.h>
 #include <line.h>
@@ -13,7 +11,7 @@
 Line irq;
 prom rom(ccmk2, sizeof(ccmk2));
 r6502 cpu(memory);
-ram<256> mirror;
+ram<256> zpage, stack;
 io io(irq);
 
 void reset() {
@@ -30,8 +28,8 @@ void setup() {
 
 	hardware_init(cpu);
 
-	memory.put(mirror, 0x0000);
-	memory.put(mirror, 0x0100);
+	memory.put(zpage, 0x0000);
+	memory.put(stack, 0x0100);
 	memory.put(io, 0x8b00);
 	memory.put(rom, 0xf000);
 	reset();
