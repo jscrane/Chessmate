@@ -72,6 +72,7 @@ void loop() {
 #else
                 cpu.run(CPU_INSTRUCTIONS);
 #endif
+		io.tick();
 		if (irq) {
 			irq.clear();
 			cpu.raise(0);

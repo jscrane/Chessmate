@@ -58,12 +58,9 @@ void RIOT::write(Memory::address a, uint8_t b) {
 		write_ddrb(b);
 		break;
 	
-	case clkti:
-		write_clkti(b);
-		break;
-
 	default:
-		DBG(printf("%04x %02x!\r\n", a, b));
+		write_timer(a, b);
+		break;
 	}
 }
 
@@ -93,7 +90,28 @@ void RIOT::write_ddrb(uint8_t b) {
 	update_portb();
 }
 
-void RIOT::write_clkti(uint8_t b) {
+void RIOT::tick() {
+
+	if (timer_running && millis() > target_time) {
+
+		irq_timer = true;
+		timer_running = false;
+		update_irq();
+	}
+}
+
+void RIOT::write_timer(Memory::address a, uint8_t b) {
+
+	const uint8_t timershift[] = { 0, 3, 6, 10 };
+	uint8_t prescaler = timershift[a & 0x03];
+
+	timer_running = true;
+	target_time = millis() + (b << prescaler) / 1000;
+
+	irq_timer = false;
+	ie_timer = (a & 0x08);
+
+	update_irq();
 }
 
 void RIOT::edge_detect() {
@@ -133,17 +151,28 @@ uint8_t RIOT::read(Memory::address a) {
 	case pbdd:
 		return read_ddrb();
 
-	case ckint:
-		return read_ckint();
-
 	default:
-		DBG(printf("%04x?\r\n", a));
+		return (a & 1)? read_irq(): read_timer();
 	}
 
 	return 0x00;
 }
 
-uint8_t RIOT::read_ckint() {
-	// FIXME
-	return 0x00;
+uint8_t RIOT::read_irq() {
+
+	uint8_t b = 0;
+	if (irq_timer) b |= IRQ_TIMER;
+	if (irq_edge) b |= IRQ_EDGE;
+	return b;
+}
+
+uint8_t RIOT::read_timer() {
+
+	uint32_t now = millis();
+
+	if (timer_running)
+		return (target_time - now) >> prescaler;
+
+	// hmmm...
+	return (now - target_time) & 0xff;
 }

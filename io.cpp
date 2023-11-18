@@ -95,12 +95,6 @@ void io::up(uint8_t key) {
 	}
 }
 
-void io::update_porta() {
-}
-
-void io::update_portb() {
-}
-
 void io::write_porta(uint8_t b) {
 
 	d.segments(b & 0x7f);

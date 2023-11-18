@@ -14,9 +14,6 @@ public:
 	virtual void operator=(uint8_t b) { RIOT::write(_acc, b); }
 	virtual operator uint8_t() { return RIOT::read(_acc); }
 
-	virtual void update_porta();
-	virtual void update_portb();
-
 	virtual void write_porta(uint8_t);
 	virtual void write_portb(uint8_t);
 
