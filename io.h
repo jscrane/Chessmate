@@ -7,10 +7,7 @@ public:
 		RIOT::register_irq(irq);
 	}
 
-	void reset() {
-		d.begin();
-	}
-
+	void reset();
 	void down(uint8_t);
 	void up(uint8_t);
 

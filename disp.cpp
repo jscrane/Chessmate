@@ -4,8 +4,8 @@
 #include "disp.h"
 #include "config.h"
 
-static const uint16_t digx[] = { 25, 75, 125, 175 };
-static const uint16_t digy = 20, digw = 30, digh = 50, segw = 5, segh = 20;
+static const uint16_t digx[] = { 0, 50, 100, 150 };
+static const uint16_t digy = 0, digw = 30, digh = 50, segw = 5, segh = 20;
 
 struct rect { uint8_t x, y, w, h; };
 
@@ -19,18 +19,20 @@ static struct rect segs[] = {
 	{ segw, digy+segw+segh, segh, segw },
 };
 
-static const uint8_t ledx[] = { 40, 90, 140, 190 };
+static const uint8_t ledx[] = { 15, 65, 115, 165 };
 static const uint8_t ledy = 100, ledr = 10;
 
 void disp::begin() {
-	Display::begin(BG_COLOUR, FG_COLOUR, ORIENT);
+	Display::begin(BG_COLOUR, FG_COLOUR, ORIENT, DISPLAY_X, DISPLAY_Y);
 	clear();
+
+	for (int i = 0; i < 4; i++)
+		seg_state[i] = 0;
 
 	for (int i = 0; i < 4; i++) {
 		drawCircle(ledx[i], ledy, ledr, FG_COLOUR);
 		led_state[i] = false;
 	}
-	drawString("Commodore CHESSmate", 25, 0);
 }
 
 // segments: a-g == 0-6

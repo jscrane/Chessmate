@@ -2,6 +2,7 @@
 #include <memory.h>
 #include <line.h>
 #include <display.h>
+#include <hardware.h>
 
 #include "disp.h"
 #include "riot.h"
@@ -39,6 +40,13 @@ const uint8_t ps2_e = 0x24;
 const uint8_t ps2_f = 0x2b;
 const uint8_t ps2_g = 0x34;
 const uint8_t ps2_h = 0x33;
+
+void io::reset() {
+	d.begin();
+#if defined(PWM_SOUND)
+	pinMode(PWM_SOUND, OUTPUT);
+#endif
+}
 
 void io::down(uint8_t key) {
 	row0 = row1 = 0x7f;
@@ -111,7 +119,9 @@ void io::write_portb(uint8_t b) {
 	else if (line == 5)
 		RIOT::write_porta_in(row0, 0xff);
 	else {
-		// FIXME: sound
+#if defined(PWM_SOUND)
+		digitalWrite(PWM_SOUND, line == 7);
+#endif
 	}
 
 	d.check(b & 0x08);
