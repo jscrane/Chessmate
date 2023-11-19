@@ -112,11 +112,10 @@ void io::write_portb(uint8_t b) {
 		RIOT::write_porta_in(row1, 0xff);
 	else if (line == 5)
 		RIOT::write_porta_in(row0, 0xff);
-	else {
 #if defined(PWM_SOUND)
+	else
 		digitalWrite(PWM_SOUND, line == 7);
 #endif
-	}
 
 	d.check(b & 0x08);
 	d.white(b & 0x10);
