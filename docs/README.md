@@ -1,7 +1,7 @@
 # Notes
 
-One place where the [circuit diagram](docs/chessmate_schematic.jpg) doesn't help much is the use of the RIOT timer. 
-For that, the assembly-language [listing](docs/ccmk2.lst) must be consulted. The [6530 documentation](docs/6530-Commodore.pdf)
+One place where the [circuit diagram](chessmate_schematic.jpg) doesn't help much is the use of the RIOT timer. 
+For that, the assembly-language [listing](ccmk2.lst) must be consulted. The [6530 documentation](6530-Commodore.pdf)
 is also very helpful.
 
 ## Timer
