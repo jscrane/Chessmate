@@ -4,12 +4,14 @@
 
 #include "disp.h"
 #include "ccmk2.h"
+#include "openings.h"
 #include "riot.h"
 #include "io.h"
 #include "config.h"
 
 Line irq;
-prom rom(ccmk2, sizeof(ccmk2));
+prom game(ccmk2, sizeof(ccmk2));
+prom opens(openings, sizeof(openings));
 r6502 cpu(memory);
 ram<256> zpage, stack;
 io io(irq);
@@ -31,7 +33,8 @@ void setup() {
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
 	memory.put(io, 0x8b00);
-	memory.put(rom, 0xf000);
+	memory.put(opens, 0x8c00);
+	memory.put(game, 0xf000);
 	reset();
 }
 
