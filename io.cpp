@@ -9,7 +9,7 @@
 #include "io.h"
 
 // keys selected by line = 4 (i.e., !line-5)
-const uint8_t g7_bit = 1 << 0;
+const uint8_t g7_bit = 1 << 6;
 const uint8_t ent_bit = 1 << 3;
 const uint8_t clr_bit = 1 << 4;
 const uint8_t h8_bit = 1 << 5;
