@@ -28,7 +28,7 @@ Please [configure](https://github.com/Bodmer/TFT_eSPI/blob/master/User_Setup_Sel
 ## Hardware
 
 ### Common
-- A PS/2 keyboard
+- A PS/2 keyboard (optional, can use a Serial Terminal instead)
 
 ### ESP8266
 - A board, e.g., [WeMOS](https://www.wemos.cc/en/latest/d1/d1_mini.html)
