@@ -1,3 +1,5 @@
+#include <setjmp.h>
+
 #include <r65emu.h>
 #include <r6502.h>
 #include <line.h>
@@ -9,17 +11,46 @@
 #include "io.h"
 #include "config.h"
 
+#if defined(PS2_SERIAL_KBD)
+ps2_serial_kbd kbd;
+
+#elif defined(HW_SERIAL_KBD)
+hw_serial_kbd kbd(Serial);
+
+#else
+#error "No keyboard defined!"
+#endif
+
 Line irq;
 prom game(ccmk2, sizeof(ccmk2));
 prom opens(openings, sizeof(openings));
 r6502 cpu(memory);
 ram<256> zpage, stack;
-io io(irq);
+io io(irq, kbd);
 
 void reset() {
-
 	hardware_reset();
 	io.reset();
+}
+
+jmp_buf jb;
+
+#if defined(CPU_DEBUG)
+bool cpu_debug = CPU_DEBUG;
+#endif
+
+void function_key(uint8_t fn) {
+	switch(fn) {
+	case 1:
+                reset();
+                longjmp(jb, 1);
+		break;
+#if defined(CPU_DEBUG)
+	case 10:
+		cpu_debug = !cpu_debug;
+		break;
+#endif
+        }
 }
 
 void setup() {
@@ -35,34 +66,15 @@ void setup() {
 	memory.put(io, 0x8b00);
 	memory.put(opens, 0x8c00);
 	memory.put(game, 0xf000);
+
+	kbd.register_fnkey_handler(function_key);
+
 	reset();
 }
 
 void loop() {
 
-#if defined(CPU_DEBUG)
-        static bool cpu_debug = CPU_DEBUG;
-#endif
-
-	if (ps2.available()) {
-		unsigned scan = ps2.read2();
-		byte key = scan & 0xff;
-		if (is_down(scan))
-			io.down(key);
-		else
-			switch (key) {
-			case PS2_F1:
-				reset();
-				break;
-#if defined(CPU_DEBUG)
-			case PS2_F10:
-				cpu_debug = !cpu_debug;
-				break;
-#endif
-			default:
-				io.up(key);
-			}
-	} else if (!cpu.halted()) {
+	if (!cpu.halted()) {
 #if defined(CPU_DEBUG)
                 if (cpu_debug) {
                         char buf[256];
