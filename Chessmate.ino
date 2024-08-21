@@ -31,28 +31,18 @@ void reset() {
 	io.reset();
 }
 
-#if defined(CPU_DEBUG)
-bool cpu_debug = CPU_DEBUG;
-#endif
-
 void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
                 reset();
 		break;
-#if defined(CPU_DEBUG)
 	case 10:
-		cpu_debug = !cpu_debug;
+		hardware_debug_cpu();
 		break;
-#endif
         }
 }
 
 void setup() {
-
-#if defined(DEBUGGING) || defined(CPU_DEBUG)
-        Serial.begin(TERMINAL_SPEED);
-#endif
 
 	hardware_init(cpu);
 
@@ -69,17 +59,7 @@ void setup() {
 
 void loop() {
 
-	if (!cpu.halted()) {
-#if defined(CPU_DEBUG)
-                if (cpu_debug) {
-                        char buf[256];
-                        Serial.println(cpu.status(buf, sizeof(buf)));
-                        cpu.run(1);
-                } else
-                        cpu.run(CPU_INSTRUCTIONS);
-#else
-                cpu.run(CPU_INSTRUCTIONS);
-#endif
+	if (hardware_run()) {
 		io.tick();
 		if (irq) {
 			irq.clear();
