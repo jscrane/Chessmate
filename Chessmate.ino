@@ -1,5 +1,3 @@
-#include <setjmp.h>
-
 #include <r65emu.h>
 #include <r6502.h>
 #include <line.h>
@@ -33,8 +31,6 @@ void reset() {
 	io.reset();
 }
 
-jmp_buf jb;
-
 #if defined(CPU_DEBUG)
 bool cpu_debug = CPU_DEBUG;
 #endif
@@ -43,7 +39,6 @@ void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
                 reset();
-                longjmp(jb, 1);
 		break;
 #if defined(CPU_DEBUG)
 	case 10:
