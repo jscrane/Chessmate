@@ -3,6 +3,7 @@
 #include <line.h>
 #include <display.h>
 #include <hardware.h>
+#include <serial_kbd.h>
 
 #include "disp.h"
 #include "riot.h"
@@ -22,74 +23,55 @@ const uint8_t c3_bit = 1 << 3;
 const uint8_t b2_bit = 1 << 4;
 const uint8_t a1_bit = 1 << 5;
 
-const uint8_t ps2_1 = 0x16;
-const uint8_t ps2_2 = 0x1e;
-const uint8_t ps2_3 = 0x26;
-const uint8_t ps2_4 = 0x25;
-const uint8_t ps2_5 = 0x2e;
-const uint8_t ps2_6 = 0x36;
-const uint8_t ps2_7 = 0x3d;
-const uint8_t ps2_8 = 0x3e;
-const uint8_t ps2_bs = 0x66;
-const uint8_t ps2_enter = 0x5a;
-const uint8_t ps2_a = 0x1c;
-const uint8_t ps2_b = 0x32;
-const uint8_t ps2_c = 0x21;
-const uint8_t ps2_d = 0x23;
-const uint8_t ps2_e = 0x24;
-const uint8_t ps2_f = 0x2b;
-const uint8_t ps2_g = 0x34;
-const uint8_t ps2_h = 0x33;
-
 void io::reset() {
 	d.begin();
+	_kbd.reset();
 #if defined(PWM_SOUND)
 	pinMode(PWM_SOUND, OUTPUT);
 #endif
 }
 
-void io::down(uint8_t key) {
-	row0 = row1 = 0x7f;
-}
+void io::key_press(uint8_t key) {
 
-void io::up(uint8_t key) {
+	row0 = row1 = 0x7f;
+
 	switch (key) {
-	case ps2_1:
-	case ps2_a:
+	case '1':
+	case 'a':
 		row1 &= ~a1_bit;
 		break;
-	case ps2_2:
-	case ps2_b:
+	case '2':
+	case 'b':
 		row1 &= ~b2_bit;
 		break;
-	case ps2_3:
-	case ps2_c:
+	case '3':
+	case 'c':
 		row1 &= ~c3_bit;
 		break;
-	case ps2_4:
-	case ps2_d:
+	case '4':
+	case 'd':
 		row1 &= ~d4_bit;
 		break;
-	case ps2_5:
-	case ps2_e:
+	case '5':
+	case 'e':
 		row1 &= ~e5_bit;
 		break;
-	case ps2_6:
-	case ps2_f:
+	case '6':
+	case 'f':
 		row1 &= ~f6_bit;
 		break;
-	case ps2_7:
-	case ps2_g:
+	case '7':
+	case 'g':
 		row0 &= ~g7_bit;
 		break;
-	case ps2_8:
-	case ps2_h:
+	case '8':
+	case 'h':
 		row0 &= ~h8_bit;
 		break;
-	case ps2_bs:
+	case 0x0b:
 		row0 &= ~clr_bit;
 		break;
-	case ps2_enter:
+	case 0x0d:
 		row0 &= ~ent_bit;
 		break;
 	}
@@ -104,6 +86,9 @@ void io::write_porta(uint8_t b) {
 }
 
 void io::write_portb(uint8_t b) {
+
+	if (_kbd.available())
+		key_press(_kbd.read());
 
 	uint8_t line = (b & 0x07);
 	if (line < 4)
