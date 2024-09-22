@@ -22,6 +22,7 @@ hw_serial_kbd kbd(Serial);
 Line irq;
 prom game(ccmk2, sizeof(ccmk2));
 prom opens(openings, sizeof(openings));
+Memory memory;
 r6502 cpu(memory);
 ram<256> zpage, stack;
 io io(irq, kbd);
