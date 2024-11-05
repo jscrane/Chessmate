@@ -24,11 +24,8 @@ const uint8_t b2_bit = 1 << 4;
 const uint8_t a1_bit = 1 << 5;
 
 void io::reset() {
-	d.begin();
+	_disp.begin();
 	_kbd.reset();
-#if defined(PWM_SOUND)
-	pinMode(PWM_SOUND, OUTPUT);
-#endif
 }
 
 void io::key_press(uint8_t key) {
@@ -79,8 +76,8 @@ void io::key_press(uint8_t key) {
 
 void io::write_porta(uint8_t b) {
 
-	d.segments(b & 0x7f);
-	d.chessmate_loses(b & 0x80);
+	_disp.segments(b & 0x7f);
+	_disp.chessmate_loses(b & 0x80);
 
 	RIOT::write_porta(b);
 }
@@ -92,7 +89,7 @@ void io::write_portb(uint8_t b) {
 
 	uint8_t line = (b & 0x07);
 	if (line < 4)
-		d.digit(line);
+		_disp.digit(line);
 	else if (line == 4)
 		RIOT::write_porta_in(row1, 0xff);
 	else if (line == 5)
@@ -102,8 +99,8 @@ void io::write_portb(uint8_t b) {
 		digitalWrite(PWM_SOUND, line == 7);
 #endif
 
-	d.check(b & 0x08);
-	d.white(b & 0x10);
+	_disp.check(b & 0x08);
+	_disp.white(b & 0x10);
 
 	RIOT::write_portb(b);
 }

@@ -1,11 +1,9 @@
 #ifndef __IO_H
 #define __IO_H
 
-class serial_kbd;
-
 class io: public Memory::Device, public RIOT {
 public:
-	io(Line &irq, serial_kbd &kbd): Memory::Device(Memory::page_size), _kbd(kbd) {
+	io(Line &irq, serial_kbd &kbd, disp &d): Memory::Device(Memory::page_size), _kbd(kbd), _disp(d) {
 		RIOT::register_irq(irq);
 	}
 
@@ -17,10 +15,10 @@ public:
 	virtual void write_porta(uint8_t);
 	virtual void write_portb(uint8_t);
 
-	disp d;
-
 private:
 	serial_kbd &_kbd;
+
+	disp &_disp;
 
 	void key_press(uint8_t);
 

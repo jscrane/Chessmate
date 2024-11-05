@@ -3,6 +3,8 @@
 #include <line.h>
 
 #include "disp.h"
+#include "scr_disp.h"
+#include "ss_disp.h"
 #include "ccmk2.h"
 #include "openings.h"
 #include "riot.h"
@@ -19,13 +21,23 @@ hw_serial_kbd kbd(Serial);
 #error "No keyboard defined!"
 #endif
 
+#if defined(SCR_DISPLAY)
+scr_disp display;
+
+#elif defined(SS_DISPLAY)
+ss_disp display;
+
+#else
+#error "No display defined!"
+#endif
+
 Line irq;
 prom game(ccmk2, sizeof(ccmk2));
 prom opens(openings, sizeof(openings));
 Memory memory;
 r6502 cpu(memory);
 ram<256> zpage, stack;
-io io(irq, kbd);
+io io(irq, kbd, display);
 
 void reset() {
 	hardware_reset();
