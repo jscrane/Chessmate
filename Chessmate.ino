@@ -5,6 +5,7 @@
 #include "disp.h"
 #include "scr_disp.h"
 #include "ss_disp.h"
+#include "keypad.h"
 #include "ccmk2.h"
 #include "openings.h"
 #include "riot.h"
@@ -16,6 +17,9 @@ ps2_serial_kbd kbd;
 
 #elif defined(HW_SERIAL_KBD)
 hw_serial_kbd kbd(Serial);
+
+#elif defined(KEYPAD_KBD)
+keypad kbd;
 
 #else
 #error "No keyboard defined!"
