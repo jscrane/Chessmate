@@ -67,7 +67,6 @@ void RIOT::write(Memory::address a, uint8_t b) {
 void RIOT::write_porta(uint8_t b) {
 
 	outa = b;
-	update_porta();
 	edge_detect();
 	if (porta_write_handler)
 		porta_write_handler(b);
@@ -76,14 +75,12 @@ void RIOT::write_porta(uint8_t b) {
 void RIOT::write_ddra(uint8_t b) {
 
 	ddra = b;
-	update_porta();
 	edge_detect();
 }
 
 void RIOT::write_portb(uint8_t b) {
 
 	outb = b;
-	update_portb();
 	if (portb_write_handler)
 		portb_write_handler(b);
 }
@@ -91,7 +88,6 @@ void RIOT::write_portb(uint8_t b) {
 void RIOT::write_ddrb(uint8_t b) {
 
 	ddrb = b;
-	update_portb();
 }
 
 void RIOT::tick() {

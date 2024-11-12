@@ -1,6 +1,5 @@
 #include <r65emu.h>
 #include <r6502.h>
-#include <line.h>
 
 #include "disp.h"
 #include "ccmk2.h"
@@ -30,6 +29,7 @@ RIOT riot;
 void reset() {
 	hardware_reset();
 	io.reset();
+	riot.reset();
 }
 
 void function_key(uint8_t fn) {

@@ -1,8 +1,6 @@
 #ifndef __RIOT_H
 #define __RIOT_H
 
-class Line;
-
 // 6530 RIOT
 // https://github.com/mamedev/mame/blob/master/src/devices/machine/mos6530.cpp
 
@@ -15,14 +13,12 @@ public:
        	{
 	}
 
-	virtual void reset() {
+	void reset() {
 		inb = ina = 0xff;
 		outb = outa = ddrb = ddra = 0;
 		ie_timer = irq_timer = ie_edge = irq_edge = false;
 		pa7_dir = 0;
 
-		update_porta();
-		update_portb();
 		update_irq();
 		edge_detect();
 	}
@@ -34,9 +30,6 @@ public:
 
 	virtual void operator=(uint8_t b) { write(_acc, b); }
 	virtual operator uint8_t() { return read(_acc); }
-
-	void write(Memory::address, uint8_t);
-	uint8_t read(Memory::address);
 
 	void write_porta_in(uint8_t, uint8_t);
 	void write_portb_in(uint8_t, uint8_t);
@@ -54,9 +47,9 @@ public:
 		portb_write_handler = fn;
 	}
 
-protected:
-	virtual void update_porta() {}
-	virtual void update_portb() {}
+private:
+	void write(Memory::address, uint8_t);
+	uint8_t read(Memory::address);
 
 	uint8_t read_porta() { return (outa & ddra) | (ina & ~ddra); }
 	uint8_t read_ddra() { return ddra; }
@@ -71,7 +64,6 @@ protected:
 	void write_ddrb(uint8_t);
 	void write_timer(Memory::address, uint8_t);
 
-private:
 	void update_irq();
 	void edge_detect();
 
