@@ -3,19 +3,20 @@
 
 class serial_kbd;
 
-class io: public Memory::Device, public RIOT {
+class io {
 public:
-	io(Line &irq, serial_kbd &kbd): Memory::Device(Memory::page_size), _kbd(kbd) {
-		RIOT::register_irq(irq);
-	}
+	io(serial_kbd &kbd): _kbd(kbd) {}
 
 	void reset();
 
-	virtual void operator=(uint8_t b) { RIOT::write(_acc, b); }
-	virtual operator uint8_t() { return RIOT::read(_acc); }
+	// callbacks
+	void write_porta(uint8_t);
+	void write_portb(uint8_t);
 
-	virtual void write_porta(uint8_t);
-	virtual void write_portb(uint8_t);
+	// callout
+	void register_keyboard_handler(std::function<void(uint8_t)> fn) {
+		keyboard_handler = fn;
+	}
 
 	disp d;
 
@@ -25,6 +26,8 @@ private:
 	void key_press(uint8_t);
 
 	uint8_t row0, row1;
+
+	std::function<void(uint8_t)> keyboard_handler;
 };
 
 #endif
