@@ -28,7 +28,6 @@
 #define LED1_PIN	0
 #define LED2_PIN	0
 #define LED3_PIN	0
-#define LED4_PIN	0
 
 // hw_keypad
 #define ROW0_PIN	0

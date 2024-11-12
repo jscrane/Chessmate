@@ -13,7 +13,6 @@ static const uint8_t leds[] = {
 	LED1_PIN,
 	LED2_PIN,
 	LED3_PIN,
-	LED4_PIN,
 };
 
 static const uint8_t segs[] = {
@@ -30,10 +29,11 @@ void ss_disp::begin() {
 
 	disp::begin();
 
-	for (unsigned i = 0; i < 4; i++) {
+	for (unsigned i = 0; i < 4; i++)
 		pinMode(digits[i], OUTPUT);
+
+	for (unsigned i = 0; i < 3; i++)
 		pinMode(leds[i], OUTPUT);
-	}
 
 	for (unsigned i = 0; i < 7; i++)
 		pinMode(segs[i], OUTPUT);
@@ -49,5 +49,7 @@ void ss_disp::segments(uint8_t digit) {
 }
 
 void ss_disp::set_led(uint8_t led, bool on) {
-	digitalWrite(leds[led], on);
+	// ignore led4 (black)
+	if (led < 3)
+		digitalWrite(leds[led], on);
 }
