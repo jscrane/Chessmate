@@ -3,13 +3,13 @@
 // pushbutton keypad matrix
 // see schematic: http://retro.hansotten.nl/6502-sbc/6530-6532/chessmate/#specs
 
-// keys selected by line = 4 (i.e., !line-5)
+// keys selected by row-0
 const uint8_t g7_bit = 1 << 6;
 const uint8_t ent_bit = 1 << 3;
 const uint8_t clr_bit = 1 << 4;
 const uint8_t h8_bit = 1 << 5;
 
-// keys selected by line = 5 (i.e., !line-4)
+// keys selected by row-1
 const uint8_t f6_bit = 1 << 0;
 const uint8_t e5_bit = 1 << 1;
 const uint8_t d4_bit = 1 << 2;
