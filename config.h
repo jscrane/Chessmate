@@ -1,5 +1,4 @@
-#ifndef __CONFIG_H
-#define __CONFIG_H
+#pragma once
 
 #define CPU_INSTRUCTIONS	1000
 
@@ -8,5 +7,3 @@
 #define ORIENT		portrait
 #define DISPLAY_X	180
 #define DISPLAY_Y	200
-
-#endif

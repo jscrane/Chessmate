@@ -1,9 +1,8 @@
-#ifndef __DISP_H
-#define __DISP_H
+#pragma once
 
 class disp {
 public:
-	virtual void begin();
+	virtual void begin() { selected = 0; }
 
 	// 7-segment display 
 	// digits: l-r == 0-3
@@ -22,4 +21,23 @@ protected:
 	uint8_t selected;
 };
 
-#endif
+class scr_disp: public disp, public Display {
+public:
+	void begin();
+	void segments(uint8_t);
+
+private:
+	void set_led(uint8_t, bool);
+
+	uint8_t seg_state[4];
+	bool led_state[4];
+};
+
+class ss_disp: public disp {
+public:
+	void begin();
+	void segments(uint8_t);
+
+protected:
+	void set_led(uint8_t, bool);
+};

@@ -2,7 +2,6 @@
 
 #include <display.h>
 #include "disp.h"
-#include "scr_disp.h"
 #include "config.h"
 
 static const uint16_t digx[] = { 0, 50, 100, 150 };

@@ -1,6 +1,6 @@
 #include <Arduino.h>
+#include <display.h>
 #include "disp.h"
-#include "ss_disp.h"
 
 void ss_disp::begin() {
 

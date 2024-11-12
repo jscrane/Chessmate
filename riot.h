@@ -1,5 +1,4 @@
-#ifndef __RIOT_H
-#define __RIOT_H
+#pragma once
 
 // 6530 RIOT
 // https://github.com/mamedev/mame/blob/master/src/devices/machine/mos6530.cpp
@@ -80,5 +79,3 @@ private:
 	std::function<void(uint8_t)> porta_write_handler;
 	std::function<void(uint8_t)> portb_write_handler;
 };
-
-#endif

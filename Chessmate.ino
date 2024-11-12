@@ -2,8 +2,6 @@
 #include <r6502.h>
 
 #include "disp.h"
-#include "scr_disp.h"
-#include "ss_disp.h"
 #include "keypad.h"
 #include "ccmk2.h"
 #include "openings.h"
