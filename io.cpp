@@ -26,6 +26,9 @@ const uint8_t a1_bit = 1 << 5;
 void io::reset() {
 	_disp.begin();
 	_kbd.reset();
+#if defined(PWM_SOUND)
+	pinMode(PWM_SOUND, OUTPUT);
+#endif
 }
 
 void io::key_press(uint8_t key) {

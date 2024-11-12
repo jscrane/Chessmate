@@ -10,8 +10,8 @@
 #define DISPLAY_Y	200
 
 #if !defined(SCR_DISPLAY) && !defined(SS_DISPLAY)
-//#define SCR_DISPLAY
-#define SS_DISPLAY
+#define SCR_DISPLAY
+//#define SS_DISPLAY
 #endif
 
 #endif
