@@ -19,13 +19,13 @@ hw_serial_kbd kbd(Serial);
 #error "No keyboard defined!"
 #endif
 
-Line irq;
 prom game(ccmk2, sizeof(ccmk2));
 prom opens(openings, sizeof(openings));
 Memory memory;
 r6502 cpu(memory);
 ram<256> zpage, stack;
-io io(irq, kbd);
+io io(kbd);
+RIOT riot;
 
 void reset() {
 	hardware_reset();
@@ -47,9 +47,16 @@ void setup() {
 
 	hardware_init(cpu);
 
+	riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
+
+	riot.register_porta_write_handler([](uint8_t b) { io.write_porta(b); });
+	riot.register_portb_write_handler([](uint8_t b) { io.write_portb(b); });
+
+	io.register_keyboard_handler([](uint8_t b) { riot.write_porta_in(b, 0xff); });
+
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
-	memory.put(io, 0x8b00);
+	memory.put(riot, 0x8b00);
 	memory.put(opens, 0x8c00);
 	memory.put(game, 0xf000);
 
@@ -60,11 +67,6 @@ void setup() {
 
 void loop() {
 
-	if (hardware_run()) {
-		io.tick();
-		if (irq) {
-			irq.clear();
-			cpu.raise(0);
-		}
-	}
+	if (hardware_run())
+		riot.tick();
 }

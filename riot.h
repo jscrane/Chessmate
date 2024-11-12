@@ -6,9 +6,10 @@ class Line;
 // 6530 RIOT
 // https://github.com/mamedev/mame/blob/master/src/devices/machine/mos6530.cpp
 
-class RIOT {
+class RIOT: public Memory::Device {
 public:
-	RIOT(): outb(0), inb(0xff), outa(0), ina(0xff), ddrb(0), ddra(0),
+	RIOT(): Memory::Device(Memory::page_size),
+		outb(0), inb(0xff), outa(0), ina(0xff), ddrb(0), ddra(0),
 		ie_timer(false), irq_timer(false), ie_edge(false), irq_edge(false), pa7(1), pa7_dir(0),
 		timer_running(false), prescaler(0)
        	{
@@ -30,14 +31,28 @@ public:
 	const uint8_t IRQ_TIMER = 0x80;
 
 	void tick();
-	void register_irq(Line &line) { irq = &line; }
+
+	virtual void operator=(uint8_t b) { write(_acc, b); }
+	virtual operator uint8_t() { return read(_acc); }
+
+	void write(Memory::address, uint8_t);
+	uint8_t read(Memory::address);
 
 	void write_porta_in(uint8_t, uint8_t);
 	void write_portb_in(uint8_t, uint8_t);
 	void write_edge(uint8_t, uint8_t);
 
-	void write(Memory::address, uint8_t);
-	uint8_t read(Memory::address);
+	void register_irq_handler(std::function<void(bool)> fn) {
+		irq_handler = fn;
+	}
+
+	void register_porta_write_handler(std::function<void(uint8_t)> fn) {
+		porta_write_handler = fn;
+	}
+
+	void register_portb_write_handler(std::function<void(uint8_t)> fn) {
+		portb_write_handler = fn;
+	}
 
 protected:
 	virtual void update_porta() {}
@@ -50,9 +65,9 @@ protected:
 	uint8_t read_irq();
 	uint8_t read_timer();
 
-	virtual void write_porta(uint8_t);
+	void write_porta(uint8_t);
 	void write_ddra(uint8_t);
-	virtual void write_portb(uint8_t);
+	void write_portb(uint8_t);
 	void write_ddrb(uint8_t);
 	void write_timer(Memory::address, uint8_t);
 
@@ -67,9 +82,11 @@ private:
 	uint32_t target_time;
 	uint8_t prescaler;
 
-	Line *irq;
-
 	uint8_t ram[128];
+
+	std::function<void(bool)> irq_handler;
+	std::function<void(uint8_t)> porta_write_handler;
+	std::function<void(uint8_t)> portb_write_handler;
 };
 
 #endif
