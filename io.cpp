@@ -78,8 +78,6 @@ void io::write_porta(uint8_t b) {
 
 	_disp.segments(b & 0x7f);
 	_disp.chessmate_loses(b & 0x80);
-
-	RIOT::write_porta(b);
 }
 
 void io::write_portb(uint8_t b) {
@@ -91,9 +89,9 @@ void io::write_portb(uint8_t b) {
 	if (line < 4)
 		_disp.digit(line);
 	else if (line == 4)
-		RIOT::write_porta_in(row1, 0xff);
+		keyboard_handler(row1);
 	else if (line == 5)
-		RIOT::write_porta_in(row0, 0xff);
+		keyboard_handler(row0);
 #if defined(PWM_SOUND)
 	else
 		digitalWrite(PWM_SOUND, line == 7);
@@ -101,6 +99,4 @@ void io::write_portb(uint8_t b) {
 
 	_disp.check(b & 0x08);
 	_disp.white(b & 0x10);
-
-	RIOT::write_portb(b);
 }
