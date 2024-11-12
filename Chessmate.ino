@@ -2,12 +2,18 @@
 #include <r6502.h>
 
 #include "disp.h"
+#include "keypad.h"
 #include "ccmk2.h"
 #include "openings.h"
 #include "riot.h"
 #include "io.h"
 #include "config.h"
 
+#if defined(HARDWARE_IO)
+hw_keypad keypad;
+ss_disp display;
+
+#else
 #if defined(PS2_SERIAL_KBD)
 ps2_serial_kbd kbd;
 
@@ -17,13 +23,16 @@ hw_serial_kbd kbd(Serial);
 #else
 #error "No keyboard defined!"
 #endif
+ser_keypad keypad(kbd);
+scr_disp display;
+#endif
 
 prom game(ccmk2, sizeof(ccmk2));
 prom opens(openings, sizeof(openings));
 Memory memory;
 r6502 cpu(memory);
 ram<256> zpage, stack;
-io io(kbd);
+io io(keypad, display);
 RIOT riot;
 
 void reset() {
@@ -52,7 +61,7 @@ void setup() {
 	riot.register_porta_write_handler([](uint8_t b) { io.write_porta(b); });
 	riot.register_portb_write_handler([](uint8_t b) { io.write_portb(b); });
 
-	io.register_keyboard_handler([](uint8_t b) { riot.write_porta_in(b, 0xff); });
+	io.register_key_handler([](uint8_t b) { riot.write_porta_in(b, 0xff); });
 
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
