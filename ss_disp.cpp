@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <display.h>
 #include "disp.h"
 
 void ss_disp::begin() {

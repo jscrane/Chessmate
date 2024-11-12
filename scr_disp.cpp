@@ -4,6 +4,8 @@
 #include "disp.h"
 #include "config.h"
 
+static Display display;
+
 static const uint16_t digx[] = { 0, 50, 100, 150 };
 static const uint16_t digy = 0, digw = 30, digh = 50, segw = 5, segh = 20;
 
@@ -26,14 +28,14 @@ void scr_disp::begin() {
 
 	disp::begin();
 
-	Display::begin(BG_COLOUR, FG_COLOUR, ORIENT, DISPLAY_X, DISPLAY_Y);
-	Display::clear();
+	display.begin(BG_COLOUR, FG_COLOUR, ORIENT, DISPLAY_X, DISPLAY_Y);
+	display.clear();
 
 	for (int i = 0; i < 4; i++)
 		seg_state[i] = 0;
 
 	for (int i = 0; i < 4; i++) {
-		Display::drawCircle(ledx[i], ledy, ledr, FG_COLOUR);
+		display.drawCircle(ledx[i], ledy, ledr, FG_COLOUR);
 		led_state[i] = false;
 	}
 }
@@ -50,7 +52,7 @@ void scr_disp::segments(uint8_t s) {
 		uint8_t b = (1 << i);
 		if ((s & b) != (st & b)) {
 			rect &seg = segs[i];
-			Display::fillRectangle(dx+seg.x, seg.y, seg.w, seg.h, (s & b)? FG_COLOUR: BG_COLOUR);
+			display.fillRectangle(dx+seg.x, seg.y, seg.w, seg.h, (s & b)? FG_COLOUR: BG_COLOUR);
 		}
 	}
 	seg_state[selected] = s;
@@ -59,7 +61,7 @@ void scr_disp::segments(uint8_t s) {
 void scr_disp::set_led(uint8_t i, bool on) {
 
 	if (led_state[i] != on) {
-		Display::fillCircle(ledx[i], ledy, ledr-1, on? FG_COLOUR: BG_COLOUR);
+		display.fillCircle(ledx[i], ledy, ledr-1, on? FG_COLOUR: BG_COLOUR);
 		led_state[i] = on;
 	}
 }

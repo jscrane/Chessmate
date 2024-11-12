@@ -21,7 +21,7 @@ protected:
 	uint8_t selected;
 };
 
-class scr_disp: public disp, public Display {
+class scr_disp: public disp {
 public:
 	void begin();
 	void segments(uint8_t);
