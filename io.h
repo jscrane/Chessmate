@@ -7,8 +7,8 @@ public:
 	void reset();
 
 	// callbacks
-	void write_porta(uint8_t);
-	void write_portb(uint8_t);
+	void on_write_porta(uint8_t);
+	void on_write_portb(uint8_t);
 
 	// callout
 	void register_key_handler(std::function<void(uint8_t)> fn) {

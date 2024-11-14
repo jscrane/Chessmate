@@ -58,8 +58,8 @@ void setup() {
 
 	riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
 
-	riot.register_porta_write_handler([](uint8_t b) { io.write_porta(b); });
-	riot.register_portb_write_handler([](uint8_t b) { io.write_portb(b); });
+	riot.register_porta_write_handler([](uint8_t b) { io.on_write_porta(b); });
+	riot.register_portb_write_handler([](uint8_t b) { io.on_write_portb(b); });
 
 	io.register_key_handler([](uint8_t b) { riot.write_porta_in(b, 0xff); });
 

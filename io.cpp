@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <memory.h>
-#include <line.h>
 #include <display.h>
 #include <hardware.h>
 #include <serial_kbd.h>
@@ -18,13 +17,13 @@ void io::reset() {
 #endif
 }
 
-void io::write_porta(uint8_t b) {
+void io::on_write_porta(uint8_t b) {
 
 	_d.segments(b & 0x7f);
 	_d.chessmate_loses(b & 0x80);
 }
 
-void io::write_portb(uint8_t b) {
+void io::on_write_portb(uint8_t b) {
 
 	uint8_t line = (b & 0x07);
 	if (line < 4)

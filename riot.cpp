@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <hardware.h>
 #include <memory.h>
-#include <line.h>
 #include "riot.h"
 
 // registers
