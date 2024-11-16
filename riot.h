@@ -25,8 +25,6 @@ public:
 	const uint8_t IRQ_EDGE = 0x40;
 	const uint8_t IRQ_TIMER = 0x80;
 
-	void tick();
-
 	virtual void operator=(uint8_t b) { write(_acc, b); }
 	virtual operator uint8_t() { return read(_acc); }
 

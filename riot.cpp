@@ -89,27 +89,22 @@ void RIOT::write_ddrb(uint8_t b) {
 	ddrb = b;
 }
 
-void RIOT::tick() {
-
-	if (timer_running && millis() > target_time) {
-
-		irq_timer = true;
-		timer_running = false;
-		update_irq();
-	}
-}
-
 void RIOT::write_timer(Memory::address a, uint8_t b) {
 
 	const uint8_t timershift[] = { 0, 3, 6, 10 };
 	uint8_t prescaler = timershift[a & 0x03];
 
-	timer_running = true;
-	target_time = millis() + (b << prescaler) / 1000;
+	uint32_t dt = (b << prescaler) / 1000;
+	hardware_oneshot_timer(dt, [this]() {
+		irq_timer = true;
+		timer_running = false;
+		update_irq();
+	});
 
+	target_time = millis() + dt;
+	timer_running = true;
 	irq_timer = false;
 	ie_timer = (a & 0x08);
-
 	update_irq();
 }
 
@@ -167,7 +162,7 @@ uint8_t RIOT::read_timer() {
 	uint32_t now = millis();
 
 	if (timer_running)
-		return (target_time - now) >> prescaler;
+		return now > target_time? 0: (target_time - now) >> prescaler;
 
 	// hmmm...
 	return (now - target_time) & 0xff;

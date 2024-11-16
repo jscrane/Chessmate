@@ -69,13 +69,14 @@ void setup() {
 	memory.put(opens, 0x8c00);
 	memory.put(game, 0xf000);
 
+#if !defined(HARDWARE_IO)
 	kbd.register_fnkey_handler(function_key);
+#endif
 
 	reset();
 }
 
 void loop() {
 
-	if (hardware_run())
-		riot.tick();
+	hardware_run();
 }

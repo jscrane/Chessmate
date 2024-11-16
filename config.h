@@ -1,7 +1,5 @@
 #pragma once
 
-#define CPU_INSTRUCTIONS	1000
-
 // scr_disp
 #define BG_COLOUR	BLACK
 #define FG_COLOUR	RED
@@ -10,6 +8,7 @@
 #define DISPLAY_Y	200
 
 // FIXME: pin assignments for esp32!
+//#define HARDWARE_IO
 
 // ss_disp
 #define DIG1_PIN	0
