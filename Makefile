@@ -25,7 +25,6 @@ endif
 
 ifeq ($t, esp32)
 UPLOADSPEED := 921600
-LIBRARIES += FS SPIFFS
 
 ifeq ($b, lilygo)
 BOARD := ttgo-t7-v14-mini32
@@ -35,8 +34,7 @@ LIBRARIES += FabGL WiFi
 
 else
 BOARD := node32s
-CPPFLAGS += -DSS_DISPLAY -DHARDWARE_H=\"hw/esp32-example.h\"
-LIBRARIES += TFT_eSPI
+CPPFLAGS += -DUSE_OWN_DISPLAY -DSS_DISPLAY -DHARDWARE_H=\"hw/esp32-example.h\"
 endif
 endif
 
