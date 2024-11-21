@@ -25,6 +25,7 @@ endif
 
 ifeq ($t, esp32)
 UPLOADSPEED := 921600
+LIBRARIES += FS SPIFFS
 
 ifeq ($b, lilygo)
 BOARD := ttgo-t7-v14-mini32
@@ -33,9 +34,8 @@ CPPFLAGS += -DHARDWARE_H=\"hw/ttgo-t7-v14-mini32.h\"
 LIBRARIES += FabGL WiFi
 
 else
-BOARD := lolin32
-CPPFLAGS += -DUSER_SETUP_LOADED -DILI9341_DRIVER -DTFT_CS=5 -DTFT_DC=2 \
-	-DTFT_RST=-1 -DSPI_FREQUENCY=40000000 -DLOAD_GLCD -DHARDWARE_H=\"hw/esp32-example.h\"
+BOARD := node32s
+CPPFLAGS += -DSS_DISPLAY -DHARDWARE_H=\"hw/esp32-example.h\"
 LIBRARIES += TFT_eSPI
 endif
 endif

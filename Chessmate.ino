@@ -9,9 +9,14 @@
 #include "io.h"
 #include "config.h"
 
-#if defined(HARDWARE_IO)
-hw_keypad keypad;
+#if defined(SS_DISPLAY)
 ss_disp display;
+#else
+scr_disp display;
+#endif
+
+#if defined(PB_KEYPAD)
+pb_keypad keypad;
 
 #else
 #if defined(PS2_SERIAL_KBD)
@@ -24,7 +29,6 @@ hw_serial_kbd kbd(Serial);
 #error "No keyboard defined!"
 #endif
 ser_keypad keypad(kbd);
-scr_disp display;
 #endif
 
 prom game(ccmk2, sizeof(ccmk2));

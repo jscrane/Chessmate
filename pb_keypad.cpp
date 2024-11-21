@@ -13,7 +13,7 @@ static const uint8_t cols[] = {
 	COL6_PIN,
 };
 
-uint8_t hw_keypad::row0() {
+uint8_t pb_keypad::row0() {
 
 	digitalWrite(ROW1_PIN, LOW);
 	digitalWrite(ROW0_PIN, HIGH);
@@ -26,7 +26,7 @@ uint8_t hw_keypad::row0() {
 	return cols;
 }
 
-uint8_t hw_keypad::row1() {
+uint8_t pb_keypad::row1() {
 
 	digitalWrite(ROW0_PIN, LOW);
 	digitalWrite(ROW0_PIN, HIGH);
@@ -41,7 +41,7 @@ uint8_t hw_keypad::row1() {
 	return cols;
 }
 
-void hw_keypad::reset() {
+void pb_keypad::reset() {
 
 	pinMode(ROW0_PIN, OUTPUT);
 	pinMode(ROW1_PIN, OUTPUT);

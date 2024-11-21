@@ -39,7 +39,7 @@ private:
 	uint8_t _r0, _r1;
 };
 
-class hw_keypad: public keypad {
+class pb_keypad: public keypad {
 public:
 	uint8_t row0();
 	uint8_t row1();
