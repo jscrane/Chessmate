@@ -4,12 +4,23 @@
 #include <hardware.h>
 #include <serial_kbd.h>
 
+#include "openings.h"
 #include "keypad.h"
 #include "disp.h"
 #include "riot.h"
 #include "io.h"
 
+io::io(keypad &k, disp &d):
+	Memory::Device(5 * Memory::page_size), riot(openings), _k(k), _d(d)
+{
+	riot.register_porta_write_handler([this](uint8_t b) { on_write_porta(b); });
+	riot.register_portb_write_handler([this](uint8_t b) { on_write_portb(b); });
+	register_key_handler([this](uint8_t b) { riot.write_porta_in(b, 0xff); });
+}
+
 void io::reset() {
+
+	riot.reset();
 	_d.begin();
 	_k.reset();
 #if defined(PWM_SOUND)

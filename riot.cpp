@@ -16,7 +16,8 @@ const uint8_t clkrdi = 0x07;	// read timeout bit
 const uint8_t clkrdt = 0x06;	// read timer
 const uint8_t ckint = 0x0e;	// read timer interrupt
 const uint8_t clkti = 0x0f;
-const uint8_t rsram = 0x80;	// start of RAM
+const unsigned rsram = 0x80;	// start of RAM
+const unsigned rsrom = 0x100;	// start of ROM
 
 void RIOT::write_porta_in(uint8_t b, uint8_t mem_mask) {
 	ina = (ina & ~mem_mask) | (b & mem_mask);
@@ -127,6 +128,9 @@ void RIOT::update_irq() {
 }
 
 uint8_t RIOT::read(Memory::address a) {
+
+	if (a >= rsrom)
+		return pgm_read_byte(rom + a - rsrom);
 
 	if (a >= rsram)
 		return ram[a - rsram];

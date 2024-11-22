@@ -4,7 +4,6 @@
 #include "disp.h"
 #include "keypad.h"
 #include "ccmk2.h"
-#include "openings.h"
 #include "riot.h"
 #include "io.h"
 #include "config.h"
@@ -32,17 +31,14 @@ ser_keypad keypad(kbd);
 #endif
 
 prom game(ccmk2, sizeof(ccmk2));
-prom opens(openings, sizeof(openings));
 Memory memory;
 r6502 cpu(memory);
 ram<256> zpage, stack;
 io io(keypad, display);
-RIOT riot;
 
 void reset() {
 	hardware_reset();
 	io.reset();
-	riot.reset();
 }
 
 void function_key(uint8_t fn) {
@@ -60,17 +56,11 @@ void setup() {
 
 	hardware_init(cpu);
 
-	riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
-
-	riot.register_porta_write_handler([](uint8_t b) { io.on_write_porta(b); });
-	riot.register_portb_write_handler([](uint8_t b) { io.on_write_portb(b); });
-
-	io.register_key_handler([](uint8_t b) { riot.write_porta_in(b, 0xff); });
+	io.riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
 
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
-	memory.put(riot, 0x8b00);
-	memory.put(opens, 0x8c00);
+	memory.put(io, 0x8b00);
 	memory.put(game, 0xf000);
 
 #if !defined(PB_KEYPAD)
