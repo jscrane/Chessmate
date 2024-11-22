@@ -9,12 +9,6 @@ static const uint8_t digits[] = {
 	DIG4_PIN,
 };
 
-static const uint8_t leds[] = {
-	LED1_PIN,
-	LED2_PIN,
-	LED3_PIN,
-};
-
 static const uint8_t segs[] = {
 	SEGA_PIN,
 	SEGB_PIN,
@@ -25,6 +19,8 @@ static const uint8_t segs[] = {
 	SEGG_PIN,
 };
 
+static uint8_t leds;
+
 void ss_disp::begin() {
 
 	disp::begin();
@@ -32,11 +28,10 @@ void ss_disp::begin() {
 	for (unsigned i = 0; i < 4; i++)
 		pinMode(digits[i], OUTPUT);
 
-	for (unsigned i = 0; i < 3; i++)
-		pinMode(leds[i], OUTPUT);
-
 	for (unsigned i = 0; i < 7; i++)
 		pinMode(segs[i], OUTPUT);
+
+	pinMode(DP_PIN, OUTPUT);
 }
 
 void ss_disp::segments(uint8_t digit) {
@@ -46,10 +41,14 @@ void ss_disp::segments(uint8_t digit) {
 
 	for (unsigned i = 0; i < 7; i++)
 		digitalWrite(segs[i], digit & (1 << i));
+
+	digitalWrite(DP_PIN, leds & (1 << selected));
 }
 
 void ss_disp::set_led(uint8_t led, bool on) {
-	// ignore led4 (black)
-	if (led < 3)
-		digitalWrite(leds[led], on);
+
+	if (on)
+		leds |= (1 << led);
+	else
+		leds &= ~(1 << led);
 }

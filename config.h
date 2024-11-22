@@ -23,11 +23,7 @@
 #define SEGE_PIN	18
 #define SEGF_PIN	19
 #define SEGG_PIN	21
-
-// FIXME: use DP?
-#define LED1_PIN	0
-#define LED2_PIN	0
-#define LED3_PIN	0
+#define DP_PIN		27
 
 // Pushbutton keypad: pb_keypad
 #define ROW0_PIN	22
@@ -39,4 +35,4 @@
 #define COL3_PIN	35
 #define COL4_PIN	32
 #define COL5_PIN	33
-#define COL6_PIN	27
+#define COL6_PIN	26
