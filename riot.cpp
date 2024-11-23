@@ -1,7 +1,6 @@
 #include <Arduino.h>
 #include <hardware.h>
 #include <memory.h>
-#include <line.h>
 #include "riot.h"
 
 // registers
@@ -17,7 +16,8 @@ const uint8_t clkrdi = 0x07;	// read timeout bit
 const uint8_t clkrdt = 0x06;	// read timer
 const uint8_t ckint = 0x0e;	// read timer interrupt
 const uint8_t clkti = 0x0f;
-const uint8_t rsram = 0x80;	// start of RAM
+const unsigned rsram = 0x80;	// start of RAM
+const unsigned rsrom = 0x100;	// start of ROM
 
 void RIOT::write_porta_in(uint8_t b, uint8_t mem_mask) {
 	ina = (ina & ~mem_mask) | (b & mem_mask);
@@ -90,27 +90,22 @@ void RIOT::write_ddrb(uint8_t b) {
 	ddrb = b;
 }
 
-void RIOT::tick() {
-
-	if (timer_running && millis() > target_time) {
-
-		irq_timer = true;
-		timer_running = false;
-		update_irq();
-	}
-}
-
 void RIOT::write_timer(Memory::address a, uint8_t b) {
 
 	const uint8_t timershift[] = { 0, 3, 6, 10 };
 	uint8_t prescaler = timershift[a & 0x03];
 
-	timer_running = true;
-	target_time = millis() + (b << prescaler) / 1000;
+	uint32_t dt = (b << prescaler) / 1000;
+	hardware_oneshot_timer(dt, [this]() {
+		irq_timer = true;
+		timer_running = false;
+		update_irq();
+	});
 
+	target_time = millis() + dt;
+	timer_running = true;
 	irq_timer = false;
 	ie_timer = (a & 0x08);
-
 	update_irq();
 }
 
@@ -133,6 +128,9 @@ void RIOT::update_irq() {
 }
 
 uint8_t RIOT::read(Memory::address a) {
+
+	if (a >= rsrom)
+		return pgm_read_byte(rom + a - rsrom);
 
 	if (a >= rsram)
 		return ram[a - rsram];
@@ -168,7 +166,7 @@ uint8_t RIOT::read_timer() {
 	uint32_t now = millis();
 
 	if (timer_running)
-		return (target_time - now) >> prescaler;
+		return now > target_time? 0: (target_time - now) >> prescaler;
 
 	// hmmm...
 	return (now - target_time) & 0xff;

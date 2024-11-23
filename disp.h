@@ -1,28 +1,43 @@
-#ifndef __DISP_H
-#define __DISP_H
+#pragma once
 
-class disp: public Display {
+class disp {
 public:
-	disp() {}
-	void begin();
+	virtual void begin() { selected = 0; }
 
 	// 7-segment display 
 	// digits: l-r == 0-3
 	// segments: a-g == 0-6
 	void digit(uint8_t d) { selected = d; }
-	void segments(uint8_t);
+	virtual void segments(uint8_t) = 0;
 
 	// leds
-	void chessmate_loses(bool on) { drawLed(0, on); }
-	void check(bool on) { drawLed(1, on); }
-	void white(bool on) { drawLed(2, on); drawLed(3, !on); }
+	void chessmate_loses(bool on) { set_led(0, on); }
+	void check(bool on) { set_led(1, on); }
+	void white(bool on) { set_led(2, on); set_led(3, !on); }
 
-private:
-	void drawLed(uint8_t, bool);
+protected:
+	virtual void set_led(uint8_t, bool) = 0;
 
 	uint8_t selected;
+};
+
+class scr_disp: public disp {
+public:
+	void begin();
+	void segments(uint8_t);
+
+private:
+	void set_led(uint8_t, bool);
+
 	uint8_t seg_state[4];
 	bool led_state[4];
 };
 
-#endif
+class ss_disp: public disp {
+public:
+	void begin();
+	void segments(uint8_t);
+
+protected:
+	void set_led(uint8_t, bool);
+};

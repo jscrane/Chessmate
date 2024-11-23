@@ -1,15 +1,13 @@
-#ifndef __RIOT_H
-#define __RIOT_H
+#pragma once
 
 // 6530 RIOT
 // https://github.com/mamedev/mame/blob/master/src/devices/machine/mos6530.cpp
 
-class RIOT: public Memory::Device {
+class RIOT {
 public:
-	RIOT(): Memory::Device(Memory::page_size),
-		outb(0), inb(0xff), outa(0), ina(0xff), ddrb(0), ddra(0),
+	RIOT(const uint8_t *rom): outb(0), inb(0xff), outa(0), ina(0xff), ddrb(0), ddra(0),
 		ie_timer(false), irq_timer(false), ie_edge(false), irq_edge(false), pa7(1), pa7_dir(0),
-		timer_running(false), prescaler(0)
+		timer_running(false), prescaler(0), rom(rom)
        	{
 	}
 
@@ -26,10 +24,8 @@ public:
 	const uint8_t IRQ_EDGE = 0x40;
 	const uint8_t IRQ_TIMER = 0x80;
 
-	void tick();
-
-	virtual void operator=(uint8_t b) { write(_acc, b); }
-	virtual operator uint8_t() { return read(_acc); }
+	void write(Memory::address, uint8_t);
+	uint8_t read(Memory::address);
 
 	void write_porta_in(uint8_t, uint8_t);
 	void write_portb_in(uint8_t, uint8_t);
@@ -48,9 +44,6 @@ public:
 	}
 
 private:
-	void write(Memory::address, uint8_t);
-	uint8_t read(Memory::address);
-
 	uint8_t read_porta() { return (outa & ddra) | (ina & ~ddra); }
 	uint8_t read_ddra() { return ddra; }
 	uint8_t read_portb() { return (outb & ddrb) | (inb & ~ddrb); }
@@ -75,10 +68,9 @@ private:
 	uint8_t prescaler;
 
 	uint8_t ram[128];
+	const uint8_t *rom;
 
 	std::function<void(bool)> irq_handler;
 	std::function<void(uint8_t)> porta_write_handler;
 	std::function<void(uint8_t)> portb_write_handler;
 };
-
-#endif

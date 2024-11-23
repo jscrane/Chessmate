@@ -1,33 +1,29 @@
-#ifndef __IO_H
-#define __IO_H
+#pragma once
 
-class serial_kbd;
-
-class io {
+class io: public Memory::Device {
 public:
-	io(serial_kbd &kbd): _kbd(kbd) {}
+	io(keypad &, disp &);
+
+	RIOT riot;
+
+	virtual void operator=(uint8_t b) { riot.write(_acc, b); }
+	virtual operator uint8_t() { return riot.read(_acc); }
 
 	void reset();
 
 	// callbacks
-	void write_porta(uint8_t);
-	void write_portb(uint8_t);
+	void on_write_porta(uint8_t);
+	void on_write_portb(uint8_t);
 
 	// callout
-	void register_keyboard_handler(std::function<void(uint8_t)> fn) {
-		keyboard_handler = fn;
+	void register_key_handler(std::function<void(uint8_t)> fn) {
+		key_handler = fn;
 	}
 
-	disp d;
-
 private:
-	serial_kbd &_kbd;
+	keypad &_k;
 
-	void key_press(uint8_t);
+	disp &_d;
 
-	uint8_t row0, row1;
-
-	std::function<void(uint8_t)> keyboard_handler;
+	std::function<void(uint8_t)> key_handler;
 };
-
-#endif
