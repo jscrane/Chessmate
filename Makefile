@@ -34,7 +34,7 @@ LIBRARIES += FabGL WiFi
 
 else
 BOARD := node32s
-CPPFLAGS += -DUSE_OWN_DISPLAY -DSS_DISPLAY -DHARDWARE_H=\"hw/esp32-example.h\"
+CPPFLAGS += -DUSE_OWN_DISPLAY -DSS_DISPLAY -DPB_KEYPAD -DHARDWARE_H=\"hw/esp32-example.h\"
 endif
 endif
 

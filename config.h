@@ -29,10 +29,10 @@
 #define ROW0_PIN	22
 #define ROW1_PIN	23
 
+// need pullup resistors on pins 34-39 on -S1 boards
 #define COL0_PIN	36
 #define COL1_PIN	39
 #define COL2_PIN	34
 #define COL3_PIN	35
 #define COL4_PIN	32
 #define COL5_PIN	33
-#define COL6_PIN	26
