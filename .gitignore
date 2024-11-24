@@ -9,3 +9,5 @@ libcore.a
 .build
 *.txt.mk
 serialout.txt
+kicad/fp-info-cache
+kicad/chessmate-backups
