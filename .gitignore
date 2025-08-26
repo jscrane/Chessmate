@@ -11,3 +11,10 @@ libcore.a
 serialout.txt
 kicad/fp-info-cache
 kicad/chessmate-backups
+kicad/*.lck
+kicad/chessmate.kicad_prl
+kicad/DRC.rpt
+kicad/ERC.rpt
+kicad/*.ses
+kicad/*.dsn
+kicad/chessmate.rules
