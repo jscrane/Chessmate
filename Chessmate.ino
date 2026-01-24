@@ -1,10 +1,10 @@
 #include <r65emu.h>
 #include <r6502.h>
+#include <riot.h>
 
 #include "disp.h"
 #include "keypad.h"
 #include "ccmk2.h"
-#include "riot.h"
 #include "io.h"
 #include "config.h"
 
@@ -30,31 +30,27 @@ hw_serial_kbd kbd(Serial);
 ser_keypad keypad(kbd);
 #endif
 
+ram<256> zpage, stack;
+io io(keypad, display);
 prom game(ccmk2, sizeof(ccmk2));
 Memory memory;
 r6502 cpu(memory);
-ram<256> zpage, stack;
-io io(keypad, display);
+Machine machine(cpu);
 
-void reset() {
-	hardware_reset();
-	io.reset();
-}
-
-void function_key(uint8_t fn) {
+static void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
-                reset();
+                machine.reset();
 		break;
 	case 10:
-		hardware_debug_cpu();
+		machine.debug_cpu();
 		break;
         }
 }
 
 void setup() {
 
-	hardware_init(cpu);
+	machine.init();
 
 	io.riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
 
@@ -67,10 +63,11 @@ void setup() {
 	kbd.register_fnkey_handler(function_key);
 #endif
 
-	reset();
+	machine.register_reset_handler([](bool) { io.reset(); });
+	machine.reset();
 }
 
 void loop() {
 
-	hardware_run();
+	machine.run();
 }
