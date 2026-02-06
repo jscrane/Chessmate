@@ -35,22 +35,22 @@ io io(keypad, display);
 prom game(ccmk2, sizeof(ccmk2));
 Memory memory;
 r6502 cpu(memory);
-Machine machine(cpu);
+Arduino machine(cpu);
 
 static void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
-                machine.reset();
+    machine.reset();
 		break;
 	case 10:
 		machine.debug_cpu();
 		break;
-        }
+  }
 }
 
 void setup() {
 
-	machine.init();
+	machine.begin();
 
 	io.riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
 

@@ -1,4 +1,6 @@
 #include <Arduino.h>
+
+#include <machine.h>
 #include <memory.h>
 #include <display.h>
 #include <hardware.h>
@@ -11,10 +13,12 @@
 #include "io.h"
 
 io::io(keypad &k, disp &d):
-	Memory::Device(5 * Memory::page_size), riot(openings), _k(k), _d(d)
+	Memory::Device(5 * Memory::page_size), _k(k), _d(d)
 {
 	riot.register_porta_write_handler([this](uint8_t b) { on_write_porta(b); });
 	riot.register_portb_write_handler([this](uint8_t b) { on_write_portb(b); });
+	riot.register_rom_read_handler([](Memory::address a) { return pgm_read_byte(openings + a); });
+
 	register_key_handler([this](uint8_t b) { riot.write_porta_in(b, 0xff); });
 }
 
