@@ -6,12 +6,6 @@ CPPFLAGS = -Wall -DNO_STORAGE -DNO_SPIRAM -DUSE_OWN_KBD -DHW_SERIAL_KBD -DSIMPLE
 CPPFLAGS += -DDEBUGGING -DCPU_DEBUG=false -DTERMINAL_SPEED=$(TERMINAL_SPEED)
 LIBRARIES = SPI PS2KeyAdvanced PS2KeyMap SimpleTimer
 
-ifeq ($t, tivac)
-BOARD := EK-LM4F120XL
-CPPFLAGS += -DHARDWARE_H=\"hw/stellarpad-example.h\"
-LIBRARIES += UTFT
-endif
-
 ifeq ($t, esp8266)
 BOARD := d1_mini
 BAUD := 921600
@@ -29,8 +23,7 @@ UPLOADSPEED := 921600
 ifeq ($b, lilygo)
 BOARD := ttgo-t7-v14-mini32
 SERIAL_PORT := /dev/ttyACM0
-CPPFLAGS += -DHARDWARE_H=\"hw/ttgo-t7-v14-mini32.h\"
-LIBRARIES += FabGL WiFi
+LIBRARIES += ESP32Lib
 
 else
 BOARD := node32s
