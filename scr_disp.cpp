@@ -1,3 +1,5 @@
+#if !defined(USE_OWN_DISPLAY)
+
 #include <Arduino.h>
 
 #include <display.h>
@@ -52,7 +54,7 @@ void scr_disp::segments(uint8_t s) {
 		uint8_t b = (1 << i);
 		if ((s & b) != (st & b)) {
 			rect &seg = segs[i];
-			display.fillRectangle(dx+seg.x, seg.y, seg.w, seg.h, (s & b)? FG_COLOUR: BG_COLOUR);
+			display.fillRect(dx+seg.x, seg.y, seg.w, seg.h, (s & b)? FG_COLOUR: BG_COLOUR);
 		}
 	}
 	seg_state[selected] = s;
@@ -65,3 +67,4 @@ void scr_disp::set_led(uint8_t i, bool on) {
 		led_state[i] = on;
 	}
 }
+#endif
