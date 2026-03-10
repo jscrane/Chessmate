@@ -12,19 +12,19 @@
 #include "riot.h"
 #include "io.h"
 
-io::io(keypad &k, disp &d):
-	Memory::Device(5 * Memory::page_size), _k(k), _d(d)
+io::io(RIOT &riot, keypad &k, disp &d):
+	_riot(riot), _k(k), _d(d)
 {
-	riot.register_porta_write_handler([this](uint8_t b) { on_write_porta(b); });
-	riot.register_portb_write_handler([this](uint8_t b) { on_write_portb(b); });
-	riot.register_rom_read_handler([](Memory::address a) { return pgm_read_byte(openings + a); });
+	_riot.register_porta_write_handler([this](uint8_t b) { on_write_porta(b); });
+	_riot.register_portb_write_handler([this](uint8_t b) { on_write_portb(b); });
+	_riot.register_rom_read_handler([](Memory::address a) { return pgm_read_byte(openings + a); });
 
-	register_key_handler([this](uint8_t b) { riot.write_porta_in(b, 0xff); });
+	register_key_handler([this](uint8_t b) { _riot.write_porta_in(b, 0xff); });
 }
 
 void io::reset() {
 
-	riot.reset();
+	_riot.reset();
 	_d.begin();
 	_k.reset();
 #if defined(PWM_SOUND)

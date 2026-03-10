@@ -1,13 +1,8 @@
 #pragma once
 
-class io: public Memory::Device {
+class io {
 public:
-	io(keypad &, disp &);
-
-	RIOT riot;
-
-	virtual void operator=(uint8_t b) { riot.write(_acc, b); }
-	virtual operator uint8_t() { return riot.read(_acc); }
+	io(RIOT &, keypad &, disp &);
 
 	void reset();
 
@@ -21,6 +16,8 @@ public:
 	}
 
 private:
+	RIOT &_riot;
+
 	keypad &_k;
 
 	disp &_d;

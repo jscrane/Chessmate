@@ -31,32 +31,33 @@ ser_keypad keypad(kbd);
 #endif
 
 ram<256> zpage, stack;
-io io(keypad, display);
 prom game(ccmk2, sizeof(ccmk2));
 Memory memory;
 r6502 cpu(memory);
 Arduino machine(cpu);
+RIOT riot(0x0500);	// 1kB ROM for openings
+io io(riot, keypad, display);
 
 static void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
-    machine.reset();
+		machine.reset();
 		break;
 	case 10:
 		machine.debug_cpu();
 		break;
-  }
+	}
 }
 
 void setup() {
 
 	machine.begin();
 
-	io.riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
+	riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
 
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
-	memory.put(io, 0x8b00);
+	memory.put(riot, 0x8b00);
 	memory.put(game, 0xf000);
 
 #if !defined(PB_KEYPAD)
