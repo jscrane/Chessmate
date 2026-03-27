@@ -38,13 +38,15 @@ Arduino machine(cpu);
 RIOT riot(0x0500);	// 1kB ROM for openings
 io io(riot, keypad, display);
 
+static bool debug_cpu;
+
 static void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
 		machine.reset();
 		break;
 	case 10:
-		machine.debug_cpu();
+		debug_cpu = !debug_cpu;
 		break;
 	}
 }
@@ -64,6 +66,7 @@ void setup() {
 	kbd.register_fnkey_handler(function_key);
 #endif
 
+	machine.set_cpu_debugging([]() { return debug_cpu; });
 	machine.register_reset_handler([](bool) { io.reset(); });
 	machine.reset();
 }
