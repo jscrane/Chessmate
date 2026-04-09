@@ -40,12 +40,13 @@ See `config.h`.
 
 ### ESP32
 - A board, e.g., [LilyGO TTGO](https://www.tinytronics.nl/shop/en/development-boards/microcontroller-boards/with-wi-fi/lilygo-ttgo-vga32-esp32)
-- A custom PCB, see below
+- A custom PCB with a `node32s`, see below.
 
-## Acknowledgements
+## Acknowledgement
 
 Thanks to *PCBWay* for sponsoring this lovely PCB:
 
 <img src="docs/pcbway.jpg" width="235" height="350"/>
 
-KiCAD files are [here](/kicad/).
+- KiCad files are [here](/kicad/)
+- Software for this configuration can be built (with `uC-Makefile`) as `make t=esp32`

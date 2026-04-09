@@ -40,6 +40,7 @@ io io(riot, keypad, display);
 
 static bool debug_cpu;
 
+#if !defined(PB_KEYPAD)
 static void function_key(uint8_t fn) {
 	switch(fn) {
 	case 1:
@@ -50,6 +51,7 @@ static void function_key(uint8_t fn) {
 		break;
 	}
 }
+#endif
 
 void setup() {
 
