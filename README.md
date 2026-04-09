@@ -44,7 +44,7 @@ See `config.h`.
 
 ## Acknowledgement
 
-Thanks to *PCBWay* for sponsoring this lovely PCB:
+Thanks to **PCBWay** for sponsoring this lovely PCB:
 
 <img src="docs/pcbway.jpg" width="235" height="350"/>
 
