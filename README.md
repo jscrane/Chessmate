@@ -40,3 +40,10 @@ See `config.h`.
 
 ### ESP32
 - A board, e.g., [LilyGO TTGO](https://www.tinytronics.nl/shop/en/development-boards/microcontroller-boards/with-wi-fi/lilygo-ttgo-vga32-esp32)
+- A custom PCB, see below
+
+## Acknowledgements
+
+Thanks to *PCBWay* for sponsoring this PCB:
+
+<img src="docs/pcbway.png"/>
