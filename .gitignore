@@ -18,3 +18,4 @@ kicad/ERC.rpt
 kicad/*.ses
 kicad/*.dsn
 kicad/chessmate.rules
+kicad/.history
