@@ -44,6 +44,8 @@ See `config.h`.
 
 ## Acknowledgements
 
-Thanks to *PCBWay* for sponsoring this PCB:
+Thanks to *PCBWay* for sponsoring this lovely PCB:
 
 <img src="docs/pcbway.jpg" width="235" height="350"/>
+
+KiCAD files are [here](kicad).
