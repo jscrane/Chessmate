@@ -11,7 +11,7 @@ Inspired by an article on [Hackaday](https://hackaday.com/2023/11/14/the-quaint-
 
 ### Common
 - [6502 Emulation](https://github.com/jscrane/r65emu) library
-- Arduino IDE or [uC-Makefile](https://github.com/jscrane/uC-Makefile)
+- [Arduino IDE](https://www.arduino.cc/en/software/) or [uC-Makefile](https://github.com/jscrane/uC-Makefile)
 
 Please [configure](https://github.com/jscrane/r65emu#configuration-for-arduino) the Emulation library for your hardware.
 
@@ -44,7 +44,7 @@ See `config.h`.
 
 ## Acknowledgement
 
-Thanks to **PCBWay** for sponsoring this lovely PCB:
+Thanks to **PCBWay** for sponsoring this lovely PCB; their service was prompt, efficient and their [KiCad plugin](https://www.pcbway.com/blog/News/PCBWay_Plug_In_for_KiCad_3ea6219c.html) made ordering painless!
 
 <img src="docs/pcbway.jpg" width="235" height="350"/>
 
