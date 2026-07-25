@@ -57,7 +57,7 @@ void setup() {
 
 	machine.begin();
 
-	riot.register_irq_handler([](bool irq) { if (irq) cpu.raise(0); });
+	riot.register_irq_handler([](bool assert) { cpu.interrupt(assert, 0); });
 
 	memory.put(zpage, 0x0000);
 	memory.put(stack, 0x0100);
